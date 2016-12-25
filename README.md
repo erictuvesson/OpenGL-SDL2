@@ -1,11 +1,5 @@
-SDL2-OpenGL-Samples
-===================
+# OpenGL SDL2
+This is a simple example of how to use OpenGL with SDL2.
 
-### Note
-
-* using SDL2 2.0.1 VC 
-
-### TODO 
-
-* Create a crossplatform CMake file
-* Create a CMake post-build command that copies all dist files to the build directory (glew32.dll, glut32.dll, SDL2.dll)
+## Getting Started
+In this example we are using NuGet to get all the dependencies(glut, glew, SDL2).

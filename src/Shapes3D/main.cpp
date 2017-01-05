@@ -4,10 +4,12 @@
  * which can be found here http://nehe.gamedev.net/tutorial/3d_shapes/10035/
  */
 
+#pragma comment (lib, "OpenGL32.lib")
+
 #include <iostream>
 
+#define GLEW_STATIC
 #include <GL/glew.h>
-#include <GL/glut.h>
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -16,11 +18,10 @@
 #define SCREEN_HEIGHT	600
 #define WINDOW_TITLE	"SDL2 OpenGL 3D Shapes"
 
-#define OPENGL_MAJOR	2
-#define OPENGL_MINOR	1
-
 // Output the message and pause the console if necessary.
 void PrintError(const char* str);
+
+void gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar);
 
 int main(int argc, char *argv[])
 {
@@ -35,8 +36,10 @@ int main(int argc, char *argv[])
 	}
 
 	// Set the desired OpenGL version
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, OPENGL_MAJOR);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, OPENGL_MINOR);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	// Create the window using SDL
 	window = SDL_CreateWindow(WINDOW_TITLE,
@@ -209,6 +212,8 @@ int main(int argc, char *argv[])
 	}
 
 	// Release resources
+	SDL_GL_DeleteContext(context);
+	SDL_Quit();
 
 	return EXIT_SUCCESS;
 }
@@ -220,4 +225,16 @@ void PrintError(const char* str)
 #ifdef _DEBUG
 	std::cin.get();
 #endif
+}
+
+void gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar)
+{
+	GLdouble xmin, xmax, ymin, ymax;
+
+	ymax = zNear * tan(fovy * M_PI / 360.0);
+	ymin = -ymax;
+	xmin = ymin * aspect;
+	xmax = ymax * aspect;
+
+	glFrustum(xmin, xmax, ymin, ymax, zNear, zFar);
 }
